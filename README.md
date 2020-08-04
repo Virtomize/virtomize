@@ -16,6 +16,7 @@
 ## Create - Deploy - Provision
 
 Virtomize is a software automation solution on top of your hypervisor.
-It allows you to create, install and configure virtual machines with only a few clicks.
+
+It allows you to **create, install** and **configure virtual machines** with only a few clicks.
 
 [![test-now](https://img.shields.io/badge/test-now-%231e828c?style=for-the-badge)](https://virtomize.com/downloads)
