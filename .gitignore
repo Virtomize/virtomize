@@ -1,0 +1,4 @@
+data/*.db
+data/*.store
+backup/*.vtmz
+tmp

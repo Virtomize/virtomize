@@ -1,0 +1,204 @@
+version: "3"
+
+services:
+  redis:
+    image: redis:5-alpine
+    container_name: "redis"
+    restart: always
+    volumes:
+      - "./redis.conf:/usr/local/etc/redis/redis.conf:ro"
+    healthcheck:
+      test: redis-cli ping
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.6.1
+    container_name: "filebeat"
+    restart: always
+    user: root
+    command:
+      - "-e"
+      - "--strict.perms=false"
+    volumes:
+      - "./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/lib/docker/containers/:/var/lib/docker/containers/:ro"
+  traefik:
+    image: traefik:v2.3.1
+    restart: always
+    depends_on:
+    - "ui"
+    - "core"
+    ports:
+      - "127.0.0.1:8000:80"
+    volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    command:
+      - "--log.level=INFO"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+  ui:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ui.rule=PathPrefix(`/`)"
+      - "traefik.http.services.ui.loadbalancer.server.port=8080"
+      - "filebeat.enable=true"
+    image: virtomize/ui:v1.0.6
+    container_name: "ui"
+    restart: always
+    environment:
+      - VIRTOMIZE_CORE_ADDRESS=http://core:11000
+      - VIRTOMIZE_UI_ADDRESS=0.0.0.0
+      - VIRTOMIZE_UI_PORT=8080
+      - VIRTOMIZE_UI_LOG_JSON=true
+  core:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.core.rule=PathPrefix(`/rest/v1/`)"
+      - "traefik.http.services.core.loadbalancer.server.port=11000"
+      - "traefik.http.middlewares.core-strip-prefix.stripprefix.prefixes=/rest/v1"
+      - "traefik.http.middlewares.core-strip-prefix.stripprefix.forceslash=false"
+      - "traefik.http.routers.core.middlewares=core-strip-prefix@docker"
+      - "filebeat.enable=true"
+    image: virtomize/core:v1.13.4
+    container_name: "core"
+    restart: always
+    volumes: 
+      - ./tmp:/app/tmp:rw
+      - ./data:/app/data:rw
+      - ./backup:/app/backup:rw
+    environment:
+      - CORE_GENERAL_LISTEN=0.0.0.0
+      - INVENTORY_URL=inventory
+      - CONFIGURATOR_URL=configurator
+      - INTEGRATOR_URL=integrator
+      - LOGCOLLECTOR_URL=logcollector
+      - NOTIFICATION_URL=notification
+      - IPXEBUILDER_URL=ipxe-builder
+  inventory:
+    labels:
+      - "filebeat.enable=true"
+    image: virtomize/inventory:v1.10.13
+    container_name: "core"
+    container_name: "inventory"
+    restart: always
+    volumes: 
+      - ./tmp:/app/tmp
+      - ./data:/app/data
+    environment:
+      - SERVICE_GENERAL_LISTEN=0.0.0.0
+      - CONFIGURATOR_URL=configurator
+      - INTEGRATOR_URL=integrator
+      - LOGCOLLECTOR_URL=logcollector
+      - NOTIFICATION_URL=notification
+      - IPXEBUILDER_URL=ipxe-builder
+  configurator:
+    labels:
+      - "filebeat.enable=true"
+    image: virtomize/configurator:v1.12.7
+    container_name: "configurator"
+    restart: always
+    volumes: 
+      - ./tmp:/app/tmp
+      - ./data:/app/data
+    environment:
+      - SERVICE_GENERAL_LISTEN=0.0.0.0
+      - INVENTORY_URL=inventory
+      - INTEGRATOR_URL=integrator
+      - LOGCOLLECTOR_URL=logcollector
+      - NOTIFICATION_URL=notification
+      - IPXEBUILDER_URL=ipxe-builder
+  integrator:
+    labels:
+      - "filebeat.enable=true"
+    image: virtomize/integrator:v1.8.2
+    container_name: "integrator"
+    restart: always
+    volumes: 
+      - ./tmp:/app/tmp
+    environment:
+      - SERVICE_GENERAL_LISTEN=0.0.0.0
+      - INVENTORY_URL=inventory
+      - CONFIGURATOR_URL=configurator
+      - LOGCOLLECTOR_URL=logcollector
+      - NOTIFICATION_URL=notification
+      - IPXEBUILDER_URL=ipxe-builder
+      - VMWAREINTEGRATOR_URL=vmware-integrator
+      - PROXMOXINTEGRATOR_URL=proxmox-integrator
+  vmware-integrator:
+    labels:
+      - "filebeat.enable=true"
+    image: virtomize/vmware:v1.8.2
+    container_name: "vmware"
+    restart: always
+    volumes: 
+      - ./tmp:/app/tmp
+    environment:
+      - SERVICE_GENERAL_LISTEN=0.0.0.0
+      - INVENTORY_URL=inventory
+      - CONFIGURATOR_URL=configurator
+      - INTEGRATOR_URL=integrator
+      - LOGCOLLECTOR_URL=logcollector
+      - NOTIFICATION_URL=notification
+      - IPXEBUILDER_URL=ipxe-builder
+      - PROXMOXINTEGRATOR_URL=proxmox-integrator
+  proxmox-integrator:
+    labels:
+      - "filebeat.enable=true"
+    image: virtomize/proxmox:v1.8.2
+    container_name: "proxmox"
+    restart: always
+    volumes: 
+      - ./tmp:/app/tmp
+    environment:
+      - SERVICE_GENERAL_LISTEN=0.0.0.0
+      - INVENTORY_URL=inventory
+      - CONFIGURATOR_URL=configurator
+      - INTEGRATOR_URL=integrator
+      - LOGCOLLECTOR_URL=logcollector
+      - NOTIFICATION_URL=notification
+      - IPXEBUILDER_URL=ipxe-builder
+      - VMWAREINTEGRATOR_URL=vmware-integrator
+  notification:
+    labels:
+      - "filebeat.enable=true"
+    image: virtomize/notification:v0.1.3
+    container_name: "notification"
+    restart: always
+    environment:
+      - SERVICE_GENERAL_LISTEN=0.0.0.0
+      - INVENTORY_URL=inventory
+      - CONFIGURATOR_URL=configurator
+      - INTEGRATOR_URL=integrator
+      - LOGCOLLECTOR_URL=logcollector
+      - IPXEBUILDER_URL=ipxe-builder
+  logcollector:
+    labels:
+      - "filebeat.enable=true"
+    image: virtomize/logcollector:v1.1.7
+    container_name: "logcollector"
+    restart: always
+    environment:
+      - REDIS_URL=redis
+      - REDIS_PORT=6379
+      - SERVICE_GENERAL_LISTEN=0.0.0.0
+      - INVENTORY_URL=inventory
+      - CONFIGURATOR_URL=configurator
+      - INTEGRATOR_URL=integrator
+      - NOTIFICATION_URL=notification
+      - IPXEBUILDER_URL=ipxe-builder
+  ipxe-builder:
+    labels:
+      - "filebeat.enable=true"
+    image: virtomize/ipxe-builder:v1.0.1
+    container_name: "ipxebuilder"
+    restart: always
+    environment:
+      - SERVICE_GENERAL_LISTEN=0.0.0.0
+      - INVENTORY_URL=inventory
+      - CONFIGURATOR_URL=configurator
+      - INTEGRATOR_URL=integrator
+      - LOGCOLLECTOR_URL=logcollector
+      - NOTIFICATION_URL=notification
