@@ -66,6 +66,9 @@ cat <<EOF >/etc/cron.d/issueip
 @reboot root /opt/virtomize-scripts/issue-ip.sh
 EOF
 
+# run it to create the issue file
+/opt/virtomize-scripts/issue-ip.sh
+
 # set motd
 cat <<EOF >/etc/motd
 
