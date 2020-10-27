@@ -1,6 +1,16 @@
 #!/bin/bash
 
 COMPOSEVERSION=1.25.4
+START=true
+BRANCH=master
+
+while getopts b:n flag
+do
+    case "${flag}" in
+        b) BRANCH=${OPTARG};;
+        n) START=false
+    esac
+done
 
 # check for correct distribution and os version
 VERSION=$(cat /etc/*-release | grep -w VERSION_CODENAME | cut -f 2 -d"=")
@@ -35,7 +45,7 @@ sudo usermod -aG docker $USER
 newgrp docker
 
 # virtomize installation 
-cd /opt && git clone -b master https://github.com/Virtomize/virtomize.git
+cd /opt && git clone -b $BRANCH https://github.com/Virtomize/virtomize.git
 
 mkdir /opt/virtomize-scripts
 
@@ -106,7 +116,7 @@ cp /opt/virtomize/proxy/apache.conf /etc/apache2/sites-available/000-default.con
 systemctl restart apache2
 
 # --no-start option used for creating virtual appliances for development
-if [ "$1" != "--no-start" ]; then
+if [ "$START" = true ]; then
   cd /opt/virtomize
   docker-compose up -d
 fi 
