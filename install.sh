@@ -9,6 +9,12 @@ if [ "$VERSION" != "buster" ]; then
         exit 1
 fi
 
+# check if we run as root
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit 1
+fi
+
 # https://computingforgeeks.com/install-docker-and-docker-compose-on-debian-10-buster/
 # prequisites
 apt update
