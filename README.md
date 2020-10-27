@@ -98,6 +98,7 @@ systemctl restart nginx
 # Update manually
 
 You can update our software manually use the following command.
+
 **Always create a backup before updating.**
 
 ```
@@ -107,9 +108,15 @@ cd /opt/virtomize
 
 # Backup
 
+## Default Backups
+
 After starting using docker-compose some folders are created including the `backup` folder.
 We do make daily backups and keep them for 30 days.
-Just copy or sync these backups to your favorit backup storage.
+Just copy or sync these backups from the `backup` folder to your favorit backup storage.
+
+## Via REST-API
+
+You can [make a backup using our REST-API](https://docu.virtomize.com/#backup-get). This backup is not stored in the `backup` folder and only for download.
 
 # You need a feature or found a bug
 
