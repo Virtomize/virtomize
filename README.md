@@ -18,8 +18,39 @@ For currently supported hypervisors and operating systems please take a look on 
 
 We have a [free version](https://virtomize.com/pricing) just install Virtomize using this repo or download a pre-build [virtual appliance](https://virtomize.com/downloads).
 
+# Installation
 
-# Requirements
+## Installation using install script
+
+Recommended for fast and easy installation
+
+### Requirements
+
+Just a fresh debian 10 system
+
+### Installation
+
+The installation will install docker, docker-compose and apache2 reverse proxy.
+
+```
+curl https://raw.githubusercontent.com/Virtomize/virtomize/master/install.sh | bash
+```
+
+## Installation using virtual appliance
+
+### Installation
+
+Download the [latest virtual appliance](https://virtomize.com/downloads)
+
+Follow the import procedure described in our [documentation](https://docu.virtomize.com/#import-ova).
+
+## Manual installation using git 
+
+Recommended only for advanced users for running Virtomize on servers with multiple other services.
+
+**We do not provide OS level support for custom installations**
+
+### Requirements
 
 The following software is required to install and run [Virtomize](https://virtomize.com) on your server. 
 
@@ -31,8 +62,6 @@ The following software is required to install and run [Virtomize](https://virtom
 For more information please consult our [documentation page](https://docu.virtomize.com).
 Make sure the server running our software can request your hypervisor API.
 
-# Installation
-
 we use a simple docker-compose setup to make it as easy as possible.
 This will start our service on `127.0.0.1:8000`
 
@@ -43,7 +72,7 @@ cd virtomize
 docker-compose up -d
 ```
 
-## Cron for update via ui
+### Cron for update via ui
 
 To enable the update button in the UI add the following cron.
 
@@ -53,11 +82,11 @@ cat <<EOF >/etc/cron.d/vtmz-update
 EOF
 ```
 
-## Reverse proxy configuration
+### Reverse proxy configuration
 
 To make sure our service can be accessed from your servers domain or IP address including SSL create a reverse proxy using Apache or Nginx.
 
-### Apache
+#### Apache
 
 debian 10 example
 ```
@@ -78,7 +107,7 @@ systemctl restart apache2
 ```
 [apache config](proxy/apache.conf)
 
-### Nginx
+#### Nginx
 
 debian 10 example
 ```
@@ -97,7 +126,7 @@ systemctl restart nginx
 
 # Update manually
 
-You can update our software manually use the following command.
+To update virtomize manually use the following command.
 
 **Always create a backup before updating.**
 
