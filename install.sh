@@ -41,11 +41,12 @@ apt -y install docker-ce docker-ce-cli containerd.io
 curl -L "https://github.com/docker/compose/releases/download/$COMPOSEVERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
-sudo usermod -aG docker $USER
+usermod -aG docker $USER
 newgrp docker
 
 # virtomize installation 
-cd /opt && git clone -b $BRANCH https://github.com/Virtomize/virtomize.git
+cd /opt 
+git clone -b $BRANCH https://github.com/Virtomize/virtomize.git
 
 mkdir /opt/virtomize-scripts
 
