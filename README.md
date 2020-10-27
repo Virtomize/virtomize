@@ -2,7 +2,7 @@
 [![Blog](https://img.shields.io/badge/%40-Blog-%23379099)](https://blog.virtomize.com)
 [![Docs](https://img.shields.io/badge/%40-Docs-%2369acb2)](https://docu.virtomize.com)
 [![Buy](https://img.shields.io/badge/Buy-License-%2382babf)](https://virtomize.com/pricing)
-[![License](https://img.shields.io/badge/License-EULA-%2382babf.svg)](https://github.com/virtomize/virtomize/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/License-EULA-%2382babf.svg)](LICENSE)
 
 [![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2Fvirtomize)](https://twitter.com/virtomize)
 [![Xing](https://img.shields.io/badge/xing-%20-blue.svg?style=social&logo=xing)](https://www.xing.com/companies/virtomizegmbh)
@@ -59,12 +59,26 @@ To make sure our service can be accessed from your servers domain or IP address 
 
 ### Apache
 
+debian 10 example
 ```
-tbd apache config
+apt -y install apache2
+
+systemctl enable apache2
+a2enmod ssl
+a2enmod proxy
+a2enmod proxy_http
+a2enmod headers
+a2enmod rewrite
+systemctl restart apache2
+cp /opt/virtomize/proxy/apache.conf /etc/apache2/sites-available/000-default.conf
+curl https://ssl-config.mozilla.org/ffdhe2048.txt >> /etc/ssl/certs/ssl-cert-snakeoil.pem
+# or use your own certificate
 ```
+[apache config](proxy/apache.conf)
 
 ### Nginx
 
+debian 10 example
 ```
 tbd nginx config
 ```
@@ -87,7 +101,7 @@ Just copy or sync these backups to your favorit backup storage.
 
 # You need a feature or found a bug
 
-Please open an [issue](https://github.com/Virtomize/Virtomize/issues/new/choose) for your feature or bug request.
+Please open an [issue](https://github.com/Virtomize/virtomize/issues/new/choose) for your feature or bug request.
 
 # Contact 
 
