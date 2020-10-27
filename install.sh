@@ -1,16 +1,8 @@
 #!/bin/bash
 
-COMPOSEVERSION=1.25.4
-START=true
-BRANCH=master
-
-while getopts b:n flag
-do
-    case "${flag}" in
-        b) BRANCH=${OPTARG};;
-        n) START=false
-    esac
-done
+export COMPOSEVERSION=1.25.4
+export SERVICESTART=true
+export VTMZBRANCH=master
 
 # check for correct distribution and os version
 VERSION=$(cat /etc/*-release | grep -w VERSION_CODENAME | cut -f 2 -d"=")
@@ -25,10 +17,18 @@ if [ "$EUID" -ne 0 ]
   exit 1
 fi
 
+while getopts b:n flag
+do
+    case "${flag}" in
+        b) export VTMZBRANCH=${OPTARG};;
+        n) export SERVICESTART=false
+    esac
+done
+
 # https://computingforgeeks.com/install-docker-and-docker-compose-on-debian-10-buster/
 # prequisites
 apt update
-apt -y install apt-transport-https ca-certificates curl gnupg2 software-properties-common openssl git
+apt -y install apt-transport-https ca-certificates curl gnupg2 software-properties-common openssl git apache2
 
 # docker repo
 curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
@@ -38,6 +38,7 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(
 apt update
 apt -y install docker-ce docker-ce-cli containerd.io
 
+# install docker
 curl -L "https://github.com/docker/compose/releases/download/$COMPOSEVERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
@@ -45,8 +46,8 @@ usermod -aG docker $USER
 newgrp docker
 
 # virtomize installation 
-cd /opt 
-git clone -b $BRANCH https://github.com/Virtomize/virtomize.git
+cd /opt
+git clone -b $VTMZBRANCH https://github.com/Virtomize/virtomize.git
 
 mkdir /opt/virtomize-scripts
 
@@ -104,8 +105,6 @@ cat <<EOF >/etc/cron.d/update
 EOF
 
 # apache reverse proxy
-apt -y install apache2
-
 systemctl enable apache2
 a2enmod ssl
 a2enmod proxy
@@ -118,7 +117,11 @@ systemctl restart apache2
 
 # -n prevents from starting the service
 # used for creating development virtual appliances
-if [ "$START" = true ]; then
+if [ "$SERVICESTART" = true ]; then
   cd /opt/virtomize
   docker-compose up -d
 fi 
+
+unset COMPOSEVERSION
+unset SERVICESTART
+unset VTMZBRANCH
