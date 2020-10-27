@@ -115,7 +115,8 @@ curl https://ssl-config.mozilla.org/ffdhe2048.txt >> /etc/ssl/certs/ssl-cert-sna
 cp /opt/virtomize/proxy/apache.conf /etc/apache2/sites-available/000-default.conf
 systemctl restart apache2
 
-# --no-start option used for creating virtual appliances for development
+# -n prevents from starting the service
+# used for creating development virtual appliances
 if [ "$START" = true ]; then
   cd /opt/virtomize
   docker-compose up -d
