@@ -48,7 +48,7 @@ Follow the import procedure described in our [documentation](https://docu.virtom
 
 Recommended only for advanced users for running Virtomize on servers with multiple other services.
 
-**We do not provide OS level support for custom installations**
+***We do not provide OS level support for custom installations***
 
 ### Requirements
 
