@@ -14,7 +14,8 @@
 
 # Create - Deploy - Provision
 
-[Virtomize](https://virtomize.com) is a commercial software build for hypervisors to create, install and configure virtual machines with only a few clicks or via [REST API](https://docu.virtomize.com).
+[Virtomize](https://virtomize.com) is a commercial software build for automating your datacenter.
+You can create, install and configure, snapshot or reinstall virtual machines with only a few clicks or via [REST API](https://docu.virtomize.com).
 
 For currently supported hypervisors and operating systems please take a look on our [FAQ](https://virtomize.com/faq/).
 
