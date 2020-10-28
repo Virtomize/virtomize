@@ -26,7 +26,7 @@ do
 done
 
 # https://computingforgeeks.com/install-docker-and-docker-compose-on-debian-10-buster/
-# prequisites
+# Prerequisites
 apt update
 apt -y install apt-transport-https ca-certificates curl gnupg2 software-properties-common openssl git apache2
 
@@ -38,7 +38,6 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(
 apt update
 apt -y install docker-ce docker-ce-cli containerd.io
 
-# install docker
 curl -L "https://github.com/docker/compose/releases/download/$COMPOSEVERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 

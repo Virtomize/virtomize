@@ -18,7 +18,7 @@
 
 For currently supported hypervisors and operating systems please take a look on our [FAQ](https://virtomize.com/faq/).
 
-We have a [free version](https://virtomize.com/pricing) just install Virtomize using this repo or download a pre-build [virtual appliance](https://virtomize.com/downloads).
+We have a [free version](https://virtomize.com/pricing). Just install Virtomize using this repo or download a pre-build [virtual appliance](https://virtomize.com/downloads).
 
 # Installation
 
@@ -64,7 +64,7 @@ The following software is required to install and run [Virtomize](https://virtom
 For more information please consult our [documentation page](https://docu.virtomize.com).
 Make sure the server running our software can request your hypervisor API.
 
-we use a simple docker-compose setup to make it as easy as possible.
+We use a simple docker-compose setup to make it as easy as possible.
 This will start our service on `127.0.0.1:8000`
 
 ```
@@ -128,7 +128,7 @@ systemctl restart nginx
 
 # Update manually
 
-To update virtomize manually use the following command.
+To manually update Virtomize use the following command.
 
 **Always create a backup before updating.**
 
@@ -141,9 +141,9 @@ cd /opt/virtomize
 
 ## Default Backups
 
-After starting using docker-compose some folders are created including the `backup` folder.
+After starting Virtomize using docker-compose multiple folders are created including the `/opt/virtomize/backup` folder.
 We do make daily backups and keep them for 30 days.
-Just copy or sync these backups from the `backup` folder to your favorit backup storage.
+Just copy or sync these backups from the `backup` folder to your favorite backup storage.
 
 ## Via REST-API
 
