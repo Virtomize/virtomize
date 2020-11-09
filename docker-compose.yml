@@ -66,7 +66,7 @@ services:
     container_name: "core"
     restart: always
     volumes: 
-      - ./tmp:/app/tmp:rw
+      - ./tmp/core:/app/tmp:rw
       - ./data:/app/data:rw
       - ./backup:/app/backup:rw
     environment:
@@ -85,7 +85,7 @@ services:
     container_name: "inventory"
     restart: always
     volumes: 
-      - ./tmp:/app/tmp
+      - ./tmp/inventory:/app/tmp
       - ./data:/app/data
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
@@ -101,7 +101,7 @@ services:
     container_name: "configurator"
     restart: always
     volumes: 
-      - ./tmp:/app/tmp
+      - ./tmp/configurator:/app/tmp
       - ./data:/app/data
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
@@ -117,7 +117,7 @@ services:
     container_name: "integrator"
     restart: always
     volumes: 
-      - ./tmp:/app/tmp
+      - ./tmp/integrator:/app/tmp
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
       - INVENTORY_URL=inventory
@@ -134,7 +134,7 @@ services:
     container_name: "vmware"
     restart: always
     volumes: 
-      - ./tmp:/app/tmp
+      - ./tmp/vmware:/app/tmp
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
       - INVENTORY_URL=inventory
@@ -151,7 +151,7 @@ services:
     container_name: "proxmox"
     restart: always
     volumes: 
-      - ./tmp:/app/tmp
+      - ./tmp/proxmox:/app/tmp
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
       - INVENTORY_URL=inventory
@@ -167,6 +167,8 @@ services:
     image: virtomize/notification:v0.1.3
     container_name: "notification"
     restart: always
+    volumes: 
+      - ./tmp/notification:/app/tmp
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
       - INVENTORY_URL=inventory
@@ -180,6 +182,8 @@ services:
     image: virtomize/logcollector:v1.1.7
     container_name: "logcollector"
     restart: always
+    volumes: 
+      - ./tmp/logcollector:/app/tmp
     environment:
       - REDIS_URL=redis
       - REDIS_PORT=6379
@@ -195,6 +199,8 @@ services:
     image: virtomize/ipxe-builder:v1.0.1
     container_name: "ipxebuilder"
     restart: always
+    volumes: 
+      - ./tmp/ipxe:/app/tmp
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
       - INVENTORY_URL=inventory
