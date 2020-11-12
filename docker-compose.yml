@@ -186,7 +186,7 @@ services:
     environment:
       - REDIS_URL=redis
       - REDIS_PORT=6379
-      - SERVICE_GENERAL_LISTEN=0.0.0.0
+      - LOGCOLLECTOR_GENERAL_LISTEN=0.0.0.0
       - INVENTORY_URL=inventory
       - CONFIGURATOR_URL=configurator
       - INTEGRATOR_URL=integrator
