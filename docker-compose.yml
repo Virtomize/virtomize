@@ -81,7 +81,6 @@ services:
     labels:
       - "filebeat.enable=true"
     image: virtomize/inventory:v1.10.13
-    container_name: "core"
     container_name: "inventory"
     restart: always
     volumes: 
