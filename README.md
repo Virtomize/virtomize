@@ -36,9 +36,7 @@ Just a fresh debian 10 system
 The installation will install docker, docker-compose and apache2 reverse proxy.
 
 ```
-git clone https://github.com/Virtomize/virtomize.git
-cd virtomize
-./install.sh
+curl -fsSL https://raw.githubusercontent.com/Virtomize/virtomize/master/install.sh | bash
 ```
 
 ## Installation using virtual appliance
