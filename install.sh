@@ -3,6 +3,7 @@
 export COMPOSEVERSION=1.25.4
 export SERVICESTART=true
 export VTMZBRANCH=master
+export NODEMO=true
 
 # check for correct distribution and os version
 VERSION=$(cat /etc/*-release | grep -w VERSION_CODENAME | cut -f 2 -d"=")
@@ -17,11 +18,12 @@ if [ "$EUID" -ne 0 ]
   exit 1
 fi
 
-while getopts b:n flag
+while getopts b:nd flag
 do
     case "${flag}" in
         b) export VTMZBRANCH=${OPTARG};;
-        n) export SERVICESTART=false
+        n) export SERVICESTART=false;;
+        d) export NODEMO=false
     esac
 done
 
@@ -41,12 +43,21 @@ apt -y install docker-ce docker-ce-cli containerd.io
 curl -L "https://github.com/docker/compose/releases/download/$COMPOSEVERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
-usermod -aG docker $USER
-newgrp docker
+if grep -q docker /etc/group 
+then
+  echo "docker group already exists"
+else
+  newgrp docker
+  usermod -aG docker $USER
+fi
 
 # virtomize installation 
 cd /opt
 git clone -b $VTMZBRANCH https://github.com/Virtomize/virtomize.git
+
+if [ "$NODEMO" = false ]; then
+  exit 0
+fi
 
 mkdir /opt/virtomize-scripts
 
