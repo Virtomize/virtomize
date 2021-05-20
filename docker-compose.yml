@@ -45,7 +45,7 @@ services:
       - "traefik.http.routers.ui.rule=PathPrefix(`/`)"
       - "traefik.http.services.ui.loadbalancer.server.port=8080"
       - "filebeat.enable=true"
-    image: virtomize/ui:v1.0.6
+    image: virtomize/ui:v1.1.1
     container_name: "ui"
     restart: always
     environment:
@@ -62,11 +62,11 @@ services:
       - "traefik.http.middlewares.core-strip-prefix.stripprefix.forceslash=false"
       - "traefik.http.routers.core.middlewares=core-strip-prefix@docker"
       - "filebeat.enable=true"
-    image: virtomize/core:v1.13.4
+    image: virtomize/core:v1.17.1
     container_name: "core"
     restart: always
     volumes: 
-      - ./tmp/core:/app/tmp:rw
+      - ./tmp:/app/tmp:rw
       - ./data:/app/data:rw
       - ./backup:/app/backup:rw
     environment:
@@ -80,11 +80,11 @@ services:
   inventory:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/inventory:v1.10.13
+    image: virtomize/inventory:v1.13.0
     container_name: "inventory"
     restart: always
     volumes: 
-      - ./tmp/inventory:/app/tmp
+      - ./tmp:/app/tmp
       - ./data:/app/data
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
@@ -96,11 +96,11 @@ services:
   configurator:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/configurator:v1.12.7
+    image: virtomize/configurator:v1.14.0
     container_name: "configurator"
     restart: always
     volumes: 
-      - ./tmp/configurator:/app/tmp
+      - ./tmp:/app/tmp
       - ./data:/app/data
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
@@ -112,11 +112,11 @@ services:
   integrator:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/integrator:v1.8.2
+    image: virtomize/integrator:v1.9.0
     container_name: "integrator"
     restart: always
     volumes: 
-      - ./tmp/integrator:/app/tmp
+      - ./tmp:/app/tmp
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
       - INVENTORY_URL=inventory
@@ -129,11 +129,11 @@ services:
   vmware-integrator:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/vmware:v1.8.2
+    image: virtomize/vmware:v1.9.0
     container_name: "vmware"
     restart: always
     volumes: 
-      - ./tmp/vmware:/app/tmp
+      - ./tmp:/app/tmp
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
       - INVENTORY_URL=inventory
@@ -146,11 +146,11 @@ services:
   proxmox-integrator:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/proxmox:v1.8.2
+    image: virtomize/proxmox:v1.9.0
     container_name: "proxmox"
     restart: always
     volumes: 
-      - ./tmp/proxmox:/app/tmp
+      - ./tmp:/app/tmp
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
       - INVENTORY_URL=inventory
@@ -163,11 +163,9 @@ services:
   notification:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/notification:v0.1.3
+    image: virtomize/notification:v1.1.0
     container_name: "notification"
     restart: always
-    volumes: 
-      - ./tmp/notification:/app/tmp
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
       - INVENTORY_URL=inventory
@@ -178,15 +176,13 @@ services:
   logcollector:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/logcollector:v1.1.7
+    image: virtomize/logcollector:v1.2.0
     container_name: "logcollector"
     restart: always
-    volumes: 
-      - ./tmp/logcollector:/app/tmp
     environment:
       - REDIS_URL=redis
       - REDIS_PORT=6379
-      - LOGCOLLECTOR_GENERAL_LISTEN=0.0.0.0
+      - SERVICE_GENERAL_LISTEN=0.0.0.0
       - INVENTORY_URL=inventory
       - CONFIGURATOR_URL=configurator
       - INTEGRATOR_URL=integrator
@@ -195,11 +191,9 @@ services:
   ipxe-builder:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/ipxe-builder:v1.0.1
+    image: virtomize/ipxe-builder:v1.1.0
     container_name: "ipxebuilder"
     restart: always
-    volumes: 
-      - ./tmp/ipxe:/app/tmp
     environment:
       - SERVICE_GENERAL_LISTEN=0.0.0.0
       - INVENTORY_URL=inventory
