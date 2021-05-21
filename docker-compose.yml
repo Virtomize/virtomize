@@ -62,7 +62,7 @@ services:
       - "traefik.http.middlewares.core-strip-prefix.stripprefix.forceslash=false"
       - "traefik.http.routers.core.middlewares=core-strip-prefix@docker"
       - "filebeat.enable=true"
-    image: virtomize/core:v1.17.1
+    image: virtomize/core:v1.17.2
     container_name: "core"
     restart: always
     volumes: 
@@ -112,7 +112,7 @@ services:
   integrator:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/integrator:v1.9.0
+    image: virtomize/integrator:v1.9.1
     container_name: "integrator"
     restart: always
     volumes: 
@@ -129,7 +129,7 @@ services:
   vmware-integrator:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/vmware:v1.9.0
+    image: virtomize/vmware:v1.9.1
     container_name: "vmware"
     restart: always
     volumes: 
@@ -146,7 +146,7 @@ services:
   proxmox-integrator:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/proxmox:v1.9.0
+    image: virtomize/proxmox:v1.9.1
     container_name: "proxmox"
     restart: always
     volumes: 
