@@ -1,0 +1,28 @@
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+      json.message_key: log
+      templates:
+        - condition.not.contains:
+            docker.container.labels.filebeat.enable: "true"
+          config:
+            - type: container
+              paths:
+                - "/var/lib/docker/containser/${data.docker.container.id}/*.log"
+
+
+processors:
+- decode_json_fields:
+   fields: ["message"]
+   process_array: true
+   max_depth: 8
+   overwrite_keys: false
+   add_error_key: true
+
+output.redis:
+  hosts: ["redis"]
+  password: ""
+  key: "%{[container.name]:default}"
+  db: 0
+  timeout: 5
