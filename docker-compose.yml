@@ -45,7 +45,7 @@ services:
       - "traefik.http.routers.ui.rule=PathPrefix(`/`)"
       - "traefik.http.services.ui.loadbalancer.server.port=8080"
       - "filebeat.enable=true"
-    image: virtomize/ui:v1.1.2
+    image: virtomize/ui:v1.1.3
     container_name: "ui"
     restart: always
     environment:
