@@ -25,7 +25,8 @@ if [ -f "$UPDATEFILE" ] || [ $m ]; then
     git checkout master
   else
     echo "checkout $branch"
-    git checkout $branch
+    git stash
+    git checkout -f $branch
   fi
 
   # pull docker
