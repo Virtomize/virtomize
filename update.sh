@@ -28,8 +28,6 @@ if [ -f "$UPDATEFILE" ] || [ $m ]; then
     git checkout $branch
   fi
 
-  exit  0
-
   # pull docker
   docker-compose pull
 
