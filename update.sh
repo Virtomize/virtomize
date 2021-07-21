@@ -3,6 +3,7 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 UPDATEFILE="$DIR/tmp/UPDATE"
+COMPOSE="/usr/local/bin/docker-compose"
 
 while getopts mb: opt
 do
@@ -30,12 +31,12 @@ if [ -f "$UPDATEFILE" ] || [ $m ]; then
   fi
 
   # pull docker
-  docker-compose pull
+  $COMPOSE pull
 
   # restart
-  docker-compose stop -t 20
-  docker-compose rm -f
-  docker-compose up -d
+  $COMPOSE stop -t 20
+  $COMPOSE rm -f
+  $COMPOSE up -d
 
   rm -f $UPDATEFILE
 
