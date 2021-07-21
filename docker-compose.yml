@@ -45,7 +45,7 @@ services:
       - "traefik.http.routers.ui.rule=PathPrefix(`/`)"
       - "traefik.http.services.ui.loadbalancer.server.port=8080"
       - "filebeat.enable=true"
-    image: virtomize/ui:v1.1.3
+    image: virtomize/ui:v1.1.4
     container_name: "ui"
     restart: always
     environment:
@@ -62,7 +62,7 @@ services:
       - "traefik.http.middlewares.core-strip-prefix.stripprefix.forceslash=false"
       - "traefik.http.routers.core.middlewares=core-strip-prefix@docker"
       - "filebeat.enable=true"
-    image: virtomize/core:v1.17.3
+    image: virtomize/core:v1.18.2
     container_name: "core"
     restart: always
     volumes: 
@@ -80,7 +80,7 @@ services:
   inventory:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/inventory:v1.13.2
+    image: virtomize/inventory:v1.13.3
     container_name: "inventory"
     restart: always
     volumes: 
@@ -96,7 +96,7 @@ services:
   configurator:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/configurator:v1.14.1
+    image: virtomize/configurator:v1.14.2
     container_name: "configurator"
     restart: always
     volumes: 
@@ -112,7 +112,7 @@ services:
   integrator:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/integrator:v1.9.2
+    image: virtomize/integrator:v1.9.3
     container_name: "integrator"
     restart: always
     volumes: 
@@ -129,7 +129,7 @@ services:
   vmware-integrator:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/vmware:v1.9.2
+    image: virtomize/vmware:v1.9.3
     container_name: "vmware"
     restart: always
     volumes: 
@@ -146,7 +146,7 @@ services:
   proxmox-integrator:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/proxmox:v1.9.2
+    image: virtomize/proxmox:v1.9.3
     container_name: "proxmox"
     restart: always
     volumes: 
@@ -163,7 +163,7 @@ services:
   notification:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/notification:v1.1.1
+    image: virtomize/notification:v1.1.2
     container_name: "notification"
     restart: always
     environment:
@@ -176,7 +176,7 @@ services:
   logcollector:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/logcollector:v1.2.1
+    image: virtomize/logcollector:v1.2.2
     container_name: "logcollector"
     restart: always
     environment:
@@ -191,7 +191,7 @@ services:
   ipxe-builder:
     labels:
       - "filebeat.enable=true"
-    image: virtomize/ipxe-builder:v1.1.1
+    image: virtomize/ipxe-builder:v1.1.2
     container_name: "ipxebuilder"
     restart: always
     environment:
