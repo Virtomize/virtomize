@@ -111,7 +111,7 @@ EOF
 # set update cron
 touch /etc/cron.d/update
 cat <<EOF >/etc/cron.d/update
-* * * * * root /opt/virtomize/update.sh
+* * * * * root /opt/virtomize/update.sh >> /opt/virtomize/update.log
 EOF
 
 # apache reverse proxy
