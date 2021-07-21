@@ -1,9 +1,10 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
+DIR=/opt/virtomize
 UPDATEFILE="$DIR/tmp/UPDATE"
+UPDATELOG="$DIR/update.log"
 COMPOSE="/usr/local/bin/docker-compose"
+ECHO="/usr/bin/echo $(date -u)"
 
 while getopts mb: opt
 do
@@ -16,28 +17,26 @@ done
 
 if [ -f "$UPDATEFILE" ] || [ $m ]; then
 
+  rm -vf $UPDATELOG
+
+  $ECHO "$UPDATEFILE found start update"
   cd $DIR
 
   # pull git
   git pull
 
   if [ -z "$branch" ]; then
-    echo "checkout master"
+    $ECHO "checkout master"
     git checkout master
   else
-    echo "checkout $branch"
+    $ECHO "checkout $branch"
     git stash
     git checkout -f $branch
   fi
 
-  # pull docker
-  $COMPOSE pull
+  $ECHO "exec $DIR/docker.sh"
+  $DIR/docker.sh
 
-  # restart
-  $COMPOSE stop -t 20
-  $COMPOSE rm -f
-  $COMPOSE up -d
-
-  rm -f $UPDATEFILE
+  rm -vf $UPDATEFILE
 
 fi
